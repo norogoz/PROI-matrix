@@ -5,10 +5,13 @@ using namespace std;
 
 int main()
 {
-    Matrix A(1);
-    Matrix B(2);
+    Matrix A;
+    double detA;
 
-    cout << A << endl << B << endl << A*B;
+    A.fillValues();
+    detA = A.det();
+
+    cout << A << endl << detA << endl;
 
     getchar();
     return 0;

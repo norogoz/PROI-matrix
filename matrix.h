@@ -2,16 +2,25 @@
 #define MATRIX_H
 
 #include <iostream>
-#define SIZE 5
+#define SIZE 3
+#define TEST 4
 
 
 class Matrix
 {
+    private:
+        Matrix(const int); // fixed size matrix
+        int N = SIZE;
+        double **value;
+
     public:
-        Matrix();
-        ~Matrix();
-        Matrix(const Matrix&);
-        Matrix(const double);
+        Matrix(); // default ctor
+        Matrix(const Matrix&); // copy ctor
+        Matrix(const double[TEST][TEST]); // test ctor
+        ~Matrix(); // dtor
+
+        int fillValues();
+        double det();
 
         inline double& operator()(int x, int y) { return value[x][y]; }
 
@@ -20,12 +29,8 @@ class Matrix
         Matrix& operator-=(const Matrix&);
         Matrix& operator*=(const Matrix&);
         Matrix& operator*=(double);
-        double det(const Matrix&, const int);
 
         friend std::ostream& operator<<(std::ostream&, const Matrix&);
-
-    private:
-        double **value;
 };
 
 Matrix operator+(const Matrix&, const Matrix&);
