@@ -20,11 +20,12 @@ class Matrix
         ~Matrix(); // dtor
 
         int fillValues();
-        double det();
+        double det(); //determinant
 
         inline double& operator()(int x, int y) { return value[x][y]; }
 
         Matrix& operator=(const Matrix&);
+        bool operator==(const Matrix&);
         Matrix& operator+=(const Matrix&);
         Matrix& operator-=(const Matrix&);
         Matrix& operator*=(const Matrix&);

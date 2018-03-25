@@ -1,18 +1,20 @@
 #include "matrix.h"
-#include<math.h>
+#include <math.h>
 
 using std::ostream; using std::istream; using std::endl;
 
 Matrix::Matrix(const int dim)
 {
-    std::cout << "Uruchomiono konstruktor na rzecz obiektu: " << this << std::endl;
+    std::cout << "***Uruchomiono konstruktor na rzecz obiektu: " << this << "***" << std::endl;
 
     N = dim;
 
+    //alokacja pamiêci
     value = new double*[N];
     for(int i = 0; i < N; ++i)
         value[i] = new double[N];
 
+    //inicjalizacja
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j) {
             value[i][j] = 0;
@@ -24,7 +26,7 @@ Matrix::Matrix(const int dim)
 
 Matrix::Matrix()
 {
-    std::cout << "Uruchomiono konstruktor na rzecz obiektu: " << this << std::endl;
+    std::cout << "***Uruchomiono konstruktor na rzecz obiektu: " << this << "***" << std::endl;
 
     value = new double*[N];
     for(int i = 0; i < N; ++i)
@@ -41,7 +43,9 @@ Matrix::Matrix()
 
 Matrix::Matrix(const Matrix& mat)
 {
-    std::cout << "Uruchomiono konstruktor na rzecz obiektu: " << this << std::endl;
+    std::cout << "***Uruchomiono konstruktor na rzecz obiektu: " << this << "***" << std::endl;
+
+    N = mat.N;
 
     value = new double*[N];
     for(int i = 0; i < N; ++i)
@@ -58,7 +62,7 @@ Matrix::Matrix(const Matrix& mat)
 
 Matrix::Matrix(const double init[TEST][TEST])
 {
-    std::cout << "Uruchomiono konstruktor na rzecz obiektu: " << this << std::endl;
+    std::cout << "***Uruchomiono konstruktor na rzecz obiektu: " << this << "***" << std::endl;
 
     N = TEST;
 
@@ -77,7 +81,7 @@ Matrix::Matrix(const double init[TEST][TEST])
 
 Matrix::~Matrix()
 {
-    std::cout << "Uruchomiono destruktor na rzecz obiektu: " << this << std::endl;
+    std::cout << "***Uruchomiono destruktor na rzecz obiektu: " << this << "***" << std::endl;
 
     for(int i = 0; i < N; ++i) {
         delete[] value[i];
@@ -92,10 +96,16 @@ int Matrix::fillValues()
 {
     std::cout << "Przypisywanie wartosci elementom obiektu " << this << std::endl;
 
+    //wczytywanie wartoœci dla ka¿dego elementu
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j) {
             std::cout << "Element [" << i << "][" << j << "]: ";
-            std::cin >> value[i][j];
+            if (std::cin >> value[i][j]); //walidacja wprowadzonych danych
+            else {
+                j--;
+                std::cin.clear();
+            }
+            std::cin.ignore(256, '\n');
         }
         std::cout << std::endl;
     }
@@ -110,18 +120,18 @@ double Matrix::det()
         return ((value[0][0] * value[1][1]) - (value[1][0] * value[0][1]));
     else {
        for (int c = 0; c < N; c++) {
-           int subi = 0; //submatrix i value
-           for (int i = 1; i < N; i++) {
+           int subi = 0; //"i" macierzy submat
+           for (int i = 1; i < N; i++) { //pomijamy i-t¹ kolumnê
               int subj = 0;
               for (int j = 0; j < N; j++) {
-                 if (j == c)
+                 if (j == c) //pomijamy c-ty wiersz
                     continue;
                  submat.value[subi][subj] = value[i][j];
                  subj++;
               }
               subi++;
            }
-           if (value[0][c] != 0 ) d += (pow(-1, c) * value[0][c] * submat.det());
+           if (value[0][c] != 0 ) d += (pow(-1, c) * value[0][c] * submat.det()); // rekursja
         }
      }
      return d;
@@ -136,6 +146,19 @@ Matrix& Matrix::operator=(const Matrix& mat)
     }
 
     return *this;
+}
+
+bool Matrix::operator==(const Matrix& mat)
+{
+    if (N != mat.N) return false;
+
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            if (value[i][j] != mat.value[i][j]) return false;
+        }
+    }
+
+    return true;
 }
 
 Matrix& Matrix::operator+=(const Matrix& add)
@@ -162,7 +185,7 @@ Matrix& Matrix::operator-=(const Matrix& sub)
 
 Matrix& Matrix::operator*=(const Matrix& mul)
 {
-    Matrix temp(0.0);
+    Matrix temp(mul.N);
 
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j) {
