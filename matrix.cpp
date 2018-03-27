@@ -9,7 +9,7 @@ Matrix::Matrix(const int dim)
 
     N = dim;
 
-    //alokacja pamiêci
+    //alokacja pamieci
     value = new double*[N];
     for(int i = 0; i < N; ++i)
         value[i] = new double[N];
@@ -121,7 +121,7 @@ double Matrix::det()
     else {
        for (int c = 0; c < N; c++) {
            int subi = 0; //"i" macierzy submat
-           for (int i = 1; i < N; i++) { //pomijamy i-t¹ kolumnê
+           for (int i = 1; i < N; i++) { //pomijamy zerowa kolumne
               int subj = 0;
               for (int j = 0; j < N; j++) {
                  if (j == c) //pomijamy c-ty wiersz
@@ -190,7 +190,7 @@ Matrix& Matrix::operator*=(const Matrix& mul)
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j) {
             for (int n = 0; n < N; ++n) {
-               temp.value[i][j] += (*this).value[i][n]*mul.value[n][j];
+               temp.value[i][j] += value[i][n]*mul.value[n][j];
             }
         }
     }

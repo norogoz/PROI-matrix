@@ -1,3 +1,16 @@
+/**
+    [PROI] Projekt laboratoryjny nr 1
+
+    Autor: Grzegorz Norbert Rogozinski 2I5
+    Prowadzacy: mgr inz. Aleksandra Pasnikowska
+
+    Cel:
+    - stworzenie klasy, ktorej obiekty reprezentuja macierze NxN
+    - przeciazenie operatorow: <<, +, +=, -, -=, *, *=
+    - obliczanie wyznacznika
+
+**/
+
 #ifndef MATRIX_H
 #define MATRIX_H
 
